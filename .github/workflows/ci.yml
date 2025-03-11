@@ -38,6 +38,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set Locale to French (fr_FR.UTF-8)
+        run: |
+          sudo locale-gen fr_FR.UTF-8
+          sudo update-locale LANG=fr_FR.UTF-8 LC_ALL=fr_FR.UTF-8
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
