@@ -73,7 +73,7 @@ jobs:
         working-directory: frontend
 
       - name: Start the app
-        run: npm start &
+        run: npm start
         working-directory: frontend
 
       - name: Wait for the app to be ready
