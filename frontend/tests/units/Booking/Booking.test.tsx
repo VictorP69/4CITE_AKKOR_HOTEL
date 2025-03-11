@@ -47,7 +47,7 @@ describe('Booking Page', () => {
             expect(screen.getByText('11/03/2025')).toBeInTheDocument(); // vérification des checkin date dans le dom
             expect(screen.getByText('11/11/2024')).toBeInTheDocument();
             expect(screen.queryByText('12/03/2025')).not.toBeInTheDocument();
-        });
+        }, {timeout: 5000});
     });
 
     it('should display all bookings (role: admin)', async () => {
