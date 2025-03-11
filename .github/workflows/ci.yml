@@ -84,7 +84,6 @@ jobs:
         run: npx cypress run --headless --browser chrome
         working-directory: frontend
 
-
   security_check:
     runs-on: ubuntu-latest
     needs: [run_backend_tests, run_frontend_tests]
@@ -97,12 +96,23 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install dotnet-security tool
-        run: dotnet tool install --global dotnet-security
-        continue-on-error: false
+      - name: Run .NET vulnerable packages check
+        run: |
+          dotnet list package --vulnerable --format json
+        working-directory: ./API
 
-      - name: Run dotnet-security check
-        run: dotnet security analyze
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Run npm audit (check vulnerabilities)
+        run: npm audit --production --json
+        working-directory: frontend
 
   build_solution:
     runs-on: ubuntu-latest
