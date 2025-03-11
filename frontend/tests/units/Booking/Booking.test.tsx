@@ -5,10 +5,10 @@ import { MemoryRouter, useNavigate } from 'react-router-dom';
 import Booking from '../../../src/pages/Booking/Booking';
 
 const mockBookings = [
-{ id: '1', hotelId: '101', checkInDate: '2025-03-11', checkOutDate: '2025-03-14', userId: 'a123' },
-{ id: '2', hotelId: '102', checkInDate: '2024-11-11', checkOutDate: '2024-11-16', userId: 'a123' },
-{ id: '3', hotelId: '103', checkInDate: '2025-03-12', checkOutDate: '2025-03-15', userId: 'z546' },
-{ id: '4', hotelId: '104', checkInDate: '2025-03-13', checkOutDate: '2025-03-16', userId: 'c652' },
+{ id: 'booking1', hotelId: '101', checkInDate: '2025-03-11', checkOutDate: '2025-03-14', userId: 'a123' },
+{ id: 'booking2', hotelId: '102', checkInDate: '2024-11-11', checkOutDate: '2024-11-16', userId: 'a123' },
+{ id: 'booking3', hotelId: '103', checkInDate: '2025-03-12', checkOutDate: '2025-03-15', userId: 'z546' },
+{ id: 'booking4', hotelId: '104', checkInDate: '2025-03-13', checkOutDate: '2025-03-16', userId: 'c652' },
 ];
 
 vi.spyOn(global.Storage.prototype, 'getItem').mockImplementation((key) => {
@@ -44,9 +44,9 @@ describe('Booking Page', () => {
             </MemoryRouter>
         );
         await waitFor(() => {
-            expect(screen.getByText('11/03/2025')).toBeInTheDocument(); // vérification des checkin date dans le dom
-            expect(screen.getByText('11/11/2024')).toBeInTheDocument();
-            expect(screen.queryByText('12/03/2025')).not.toBeInTheDocument();
+            expect(screen.getByText('booking1')).toBeInTheDocument(); // vérification des reservation par id
+            expect(screen.getByText('booking2')).toBeInTheDocument();
+            expect(screen.queryByText('booking3')).not.toBeInTheDocument();
         }, {timeout: 1000});
     });
 
@@ -64,10 +64,10 @@ describe('Booking Page', () => {
         );
 
         await waitFor(() => {
-            expect(screen.getByText('11/03/2025')).toBeInTheDocument();
-            expect(screen.getByText('11/11/2024')).toBeInTheDocument();
-            expect(screen.getByText('12/03/2025')).toBeInTheDocument();
-            expect(screen.getByText('13/03/2025')).toBeInTheDocument();
+            expect(screen.getByText('booking1')).toBeInTheDocument();
+            expect(screen.getByText('booking2')).toBeInTheDocument();
+            expect(screen.getByText('booking3')).toBeInTheDocument();
+            expect(screen.getByText('booking4')).toBeInTheDocument();
         });
     });
 
