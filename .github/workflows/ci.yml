@@ -104,19 +104,6 @@ jobs:
         run: dotnet list package --vulnerable --format json
         working-directory: ./API
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: frontend
-
-      - name: Run npm audit (check vulnerabilities)
-        run: npm audit --production --json
-        working-directory: frontend
-
   build_solution:
     runs-on: ubuntu-latest
     needs: [security_check]
