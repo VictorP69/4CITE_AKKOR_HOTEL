@@ -1,6 +1,12 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+
+USER root
+
 WORKDIR /app
+
+RUN mkdir -p /app/images && chown -R app:app /app/images
+
+USER app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -17,4 +23,5 @@ RUN dotnet publish "API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "API.dll"]

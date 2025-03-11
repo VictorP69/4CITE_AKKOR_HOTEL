@@ -23,7 +23,10 @@ namespace API.Models
         public string Description { get; set; }
 
         [Required]
-        [Column("PictureList")]
-        public List<Blob> PictureList { get; set; }
+        [Column("NightPrice")]
+        public double NightPrice { get; set; }
+
+        [Required]
+        public List<HotelBlob> PictureList { get; set; } = new List<HotelBlob>();
     }
 }

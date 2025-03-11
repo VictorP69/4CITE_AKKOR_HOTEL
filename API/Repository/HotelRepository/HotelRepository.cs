@@ -1,7 +1,7 @@
-﻿using API.DTO;
-using API.Models;
+﻿using API.Models;
 using API.Contexts;
 using Microsoft.EntityFrameworkCore;
+using API.DTO.HotelDto;
 
 namespace API.Repository.HotelRepository
 {
@@ -9,7 +9,7 @@ namespace API.Repository.HotelRepository
     {
         public async Task<List<Hotel>> GetAll()
         {
-            var hotels = await context.Hotel.ToListAsync();
+            var hotels = await context.Hotel.Include(h => h.PictureList).ToListAsync();
             return hotels;
         }
         public async Task<Hotel> Get(Guid id)
@@ -18,25 +18,39 @@ namespace API.Repository.HotelRepository
             return hotel;
         }
 
-        public async Task<Hotel> Create(PostHotelDto createHotelDto)
+        public async Task<Hotel> Create(PostHotelDto postHotelDto)
         {
             var newHotel = new Hotel 
             {
-                Name = createHotelDto.Name,
-                Location = createHotelDto.Location,
-                Description = createHotelDto.Description,
-                PictureList = createHotelDto.PictureList
+                Name = postHotelDto.Name,
+                Location = postHotelDto.Location,
+                NightPrice = postHotelDto.NightPrice,
+                Description = postHotelDto.Description,
             };
             await context.Hotel.AddAsync(newHotel);
             await context.SaveChangesAsync();
             return newHotel;
         }
-        public async Task<Hotel> Update(Hotel hotel, PutHotelDto putHotelDto)
+        public async Task AddPictures(List<HotelBlob> hotelBlobs)
         {
-            hotel.Name = putHotelDto.Name;
-            hotel.Location = putHotelDto.Location;
-            hotel.Description = putHotelDto.Description;
-            hotel.PictureList = putHotelDto.PictureList;
+            await context.HotelBlob.AddRangeAsync(hotelBlobs);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Hotel> Update(Hotel hotel, PatchHotelDto patchHotelDto)
+        {
+            if (patchHotelDto.Name != null)
+                hotel.Name = patchHotelDto.Name;
+
+            if (patchHotelDto.Location != null)
+                hotel.Location = patchHotelDto.Location;
+
+            if (patchHotelDto.Description != null)
+                hotel.Description = patchHotelDto.Description;
+
+            if (patchHotelDto.NightPrice != null)
+                hotel.NightPrice = patchHotelDto.NightPrice.Value;
+
             await context.SaveChangesAsync();
             return hotel;
         }

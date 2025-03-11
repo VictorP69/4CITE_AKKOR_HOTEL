@@ -1,33 +1,32 @@
 services:
-  # frontend:
-  #   build:
-  #     context: ./navigation-service
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8081:8080"
-  #   environment:
-  #     - TOMTOM_URL=${TOMTOM_URL}
-  #     - TOMTOM_APIKEY=${TOMTOM_APIKEY}
-  #     - GEOAPIFY_URL=${GEOAPIFY_URL}
-  #     - GEOAPIFY_APIKEY=${GEOAPIFY_APIKEY}
-  #   develop:
-  #     watch:
-  #       - action: rebuild
-  #         path: ./navigation-service
-  #   networks:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend
+    networks:
+      - backend-net
+
   api:
     build:
       context: ./API
       dockerfile: Dockerfile
     ports:
-      - "8082:8080"
+      - "8081:8080"
     develop:
       watch:
         - action: rebuild
           path: ./API
     networks:
       - backend-net
+    volumes:
+      - images_vol:/app/images
+
   mysql:
     image: 'mysql:8.0'
     environment:
@@ -40,7 +39,8 @@ services:
     networks:
       - backend-net
     volumes:
-      - sql_db_vol:/var/lib/sql_db_vol
+      - sql_db_vol:/var/lib/mysql
+
 networks:
   backend-net:
     driver: bridge
@@ -48,5 +48,7 @@ networks:
     driver: bridge
   database-net:
     driver: bridge
-volumes: 
+
+volumes:
   sql_db_vol:
+  images_vol:
