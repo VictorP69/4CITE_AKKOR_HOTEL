@@ -97,8 +97,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install security tools
-        run: sudo apt-get install -y bandit
+      - name: Install dotnet-security tool
+        run: dotnet tool install --global dotnet-security
+        continue-on-error: false
+
+      - name: Run dotnet-security check
+        run: dotnet security analyze
 
   build_solution:
     runs-on: ubuntu-latest
